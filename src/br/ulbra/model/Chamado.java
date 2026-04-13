@@ -14,6 +14,26 @@ public class Chamado {
     private String status;
     private Timestamp dataAbertura;
 
+    
+     public Chamado() {
+    }
+     
+     public Chamado(Long id, String solicitante, String sala,
+                   String equipamentoTag, String problemaRelatado,
+                   String diagnosticoTecnico, String prioridade,
+                   String status, Timestamp dataAbertura) {
+
+        this.id = id;
+        this.solicitante = solicitante;
+        this.sala = sala;
+        this.equipamentoTag = equipamentoTag;
+        this.problemaRelatado = problemaRelatado;
+        this.diagnosticoTecnico = diagnosticoTecnico;
+        this.prioridade = prioridade;
+        this.status = status;
+        this.dataAbertura = dataAbertura;
+    } 
+     
     public Long getId() {
         return id;
     }
