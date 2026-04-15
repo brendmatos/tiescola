@@ -12,7 +12,7 @@ public class Chamado {
     private String diagnosticoTecnico;
     private String prioridade;
     private String status;
-    private Timestamp dataAbertura;
+    private String dataAbertura;
 
     
      public Chamado() {
@@ -21,7 +21,7 @@ public class Chamado {
      public Chamado(Long id, String solicitante, String sala,
                    String equipamentoTag, String problemaRelatado,
                    String diagnosticoTecnico, String prioridade,
-                   String status, Timestamp dataAbertura) {
+                   String status, String dataAbertura) {
 
         this.id = id;
         this.solicitante = solicitante;
@@ -98,11 +98,11 @@ public class Chamado {
         this.status = status;
     }
 
-    public Timestamp getDataAbertura() {
+    public String getDataAbertura() {
         return dataAbertura;
     }
 
-    public void setDataAbertura(Timestamp dataAbertura) {
+    public void setDataAbertura(String dataAbertura) {
         this.dataAbertura = dataAbertura;
     }
 
