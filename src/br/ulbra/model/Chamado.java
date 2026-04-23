@@ -1,7 +1,5 @@
 package br.ulbra.model;
 
-import java.sql.Timestamp;
-
 public class Chamado {
 
     private Long id;
