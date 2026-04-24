@@ -6,7 +6,13 @@
 package br.ulbra.view;
 
 import br.ulbra.controller.UsuarioController;
+import br.ulbra.dao.ConnectionFactory;
+import br.ulbra.dao.UsuarioDaoImpl;
 import br.ulbra.model.Usuario;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,23 +27,39 @@ public class UsuarioView extends javax.swing.JFrame {
      */
     public UsuarioView() {
         initComponents();
-        listarTabela();
+        setLocationRelativeTo(null);
+        carregarTabela();
     }
 
-    private void listarTabela() {
+    private void carregarTabela() {
 
-        DefaultTableModel model = (DefaultTableModel) tblUsuario.getModel();
-        model.setRowCount(0);
+        DefaultTableModel modelo = (DefaultTableModel) tblUsuario.getModel();
+        modelo.setRowCount(0);
 
-        for (Usuario u : controller.listar()) {
-            model.addRow(new Object[]{
-                u.getId_usuario(),
-                u.getNome(),
-                u.getEmail(),
-                u.getSenha()
-            });
+       String sql = "SELECT * FROM Usuarios";
+
+    // O try-with-resources garante que a conexão e o statement sejam fechados
+    try (Connection con = ConnectionFactory.getConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        // Executamos a consulta
+        try (ResultSet rs = pst.executeQuery()) {
+           
+            while (rs.next()) {
+                // Adiciona a linha no modelo da JTable
+                modelo.addRow(new Object[]{
+                    rs.getString("nome"),
+                    rs.getString("email"),
+                    rs.getString("senha")
+                });
+            }
         }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar tabela: " + e.getMessage());
     }
+}
+
     
 
     /**
@@ -139,65 +161,64 @@ public class UsuarioView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel6))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(236, 236, 236)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(203, 203, 203)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))))
-                .addGap(54, 54, 54)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                    .addComponent(txtNome)
-                    .addComponent(txtSenha))
-                .addGap(258, 258, 258))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(403, 403, 403)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                            .addComponent(txtNome)
+                            .addComponent(txtSenha)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
                         .addComponent(bntSalvar)
-                        .addGap(90, 90, 90)
+                        .addGap(36, 36, 36)
                         .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(39, 39, 39)
                         .addComponent(btnExcluir)
-                        .addGap(86, 86, 86)
-                        .addComponent(btnLimpar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(38, 38, 38)
+                        .addComponent(btnLimpar)))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel2)
-                .addGap(63, 63, 63)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(46, 46, 46)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5))
-                .addGap(52, 52, 52)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(159, 159, 159)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bntSalvar)
-                    .addComponent(btnEditar)
-                    .addComponent(btnExcluir)
-                    .addComponent(btnLimpar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(38, 38, 38)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(144, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bntSalvar)
+                            .addComponent(btnEditar)
+                            .addComponent(btnExcluir)
+                            .addComponent(btnLimpar))
+                        .addGap(77, 77, 77))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -224,16 +245,37 @@ public class UsuarioView extends javax.swing.JFrame {
  UsuarioController controller = new UsuarioController();
  
     private void bntSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntSalvarActionPerformed
-String msg = controller.salvar(
-            txtNome.getText(),
-            txtEmail.getText(),
-            txtSenha.getText()
-            
-            
-    );
+// 1. Validar se os campos não estão vazios
+        if (txtNome.getText().isEmpty() || txtEmail.getText().isEmpty()
+                || new String(txtSenha.getText()).isEmpty()) {
 
-    JOptionPane.showMessageDialog(null, msg);
-    listarTabela();        // TODO add your handling code here:
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos!");
+            return; // Interrompe a execução
+        }
+
+        try {
+            // 2. Criar o objeto Model e popular com os dados da tela
+            Usuario u = new Usuario();
+            u.setNome(txtNome.getText());
+            u.setEmail(txtEmail.getText());
+
+            // No Swing, o JPasswordField retorna char[], por isso convertemos para String
+            String senhaPura = new String(txtSenha.getText());
+            u.setSenha(senhaPura);
+
+            // 3. Instanciar o DAO e chamar o método salvar
+            // Lembre-se que o seu salvar() agora faz o BCrypt.hashpw internamente
+            UsuarioDaoImpl dao = new UsuarioDaoImpl();
+            dao.salvar(u);
+
+            // Se tiver uma JTable na tela, pode atualizar ela aqui
+            // carregarTabela();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao salvar no formulário: " + e.getMessage());
+        }
+    
+ // JOptionPane.showMessageDialog(null, msg);    carregarTabela();      
+ 
     }//GEN-LAST:event_bntSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -271,7 +313,7 @@ int linha = tblUsuario.getSelectedRow();
 
     JOptionPane.showMessageDialog(null, msg);
 
-    listarTabela();
+    carregarTabela();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -296,7 +338,7 @@ int linha = tblUsuario.getSelectedRow();
     controller.excluir(id);
 
     JOptionPane.showMessageDialog(null, "Excluído!");
-    listarTabela();
+    carregarTabela();
 }
 
                 // TODO add your handling code here:
@@ -335,7 +377,7 @@ int linha = tblUsuario.getSelectedRow();
                 new UsuarioView().setVisible(true);
             }
         });
-    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntSalvar;

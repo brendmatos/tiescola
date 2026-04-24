@@ -32,7 +32,7 @@ public class ChamadoController {
             chamado.setDataAbertura(dataAbertura);
 
             service.salvar(chamado);
-            return "Usuário cadastrado com sucesso";
+            return "Chamado cadastrado com sucesso";
 
         } catch (Exception e) {
             return "Erro: " + e.getMessage();
