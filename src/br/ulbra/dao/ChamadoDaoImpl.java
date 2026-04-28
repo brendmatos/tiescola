@@ -1,5 +1,3 @@
-
-    
 package br.ulbra.dao;
 
 import br.ulbra.model.Chamado;
@@ -16,14 +14,14 @@ public class ChamadoDaoImpl implements ChamadoDao {
 
     @Override
     public void salvar(Chamado chamado) {
-        String sql = "INSERT INTO ti_escola (solicitante, sala, equipamento_tag, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO chamado_tecnico (solicitante, equipamento_tag, problema_relatado, diagnostico_tecnico, prioridade, status, data_abertura) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, chamado.getSolicitante());
-            stmt.setString(2, chamado.getSala());
-            stmt.setString(3, chamado.getEquipamentoTag());
+            stmt.setLong(1, chamado.getId());
+            stmt.setInt(2, chamado.getIdUsuario());
+            stmt.setInt(3, chamado.getIdEquipamentoTag());
             stmt.setString(4, chamado.getProblemaRelatado());
             stmt.setString(5, chamado.getDiagnosticoTecnico());
             stmt.setString(6, chamado.getPrioridade());
@@ -39,19 +37,18 @@ public class ChamadoDaoImpl implements ChamadoDao {
 
     @Override
     public List<Chamado> listar() {
-        String sql = "SELECT * FROM ti_escola";
+        String sql = "SELECT * FROM chamado_tecnico";
         List<Chamado> lista = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Chamado c = new Chamado(
                         rs.getLong("id"),
-                        rs.getString("solicitante"),
-                        rs.getString("sala"),
-                        rs.getString("equipamento_tag"),
+                        rs.getInt("id_usuario"),
+                        rs.getInt("id_equipamento"),
                         rs.getString("problema_relatado"),
                         rs.getString("diagnostico_tecnico"),
                         rs.getString("prioridade"),
@@ -62,7 +59,7 @@ public class ChamadoDaoImpl implements ChamadoDao {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Erro:"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro:" + e.getMessage());
         }
 
         return lista;
@@ -70,10 +67,10 @@ public class ChamadoDaoImpl implements ChamadoDao {
 
     @Override
     public Chamado buscarPorId(Long id) {
-        String sql = "SELECT * FROM ti_escola WHERE id = ?";
+        String sql = "SELECT * FROM chamado_tecnico WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -81,9 +78,8 @@ public class ChamadoDaoImpl implements ChamadoDao {
             if (rs.next()) {
                 return new Chamado(
                         rs.getLong("id"),
-                        rs.getString("solicitante"),
-                        rs.getString("sala"),
-                        rs.getString("equipamento_tag"),
+                        rs.getInt("id_usuario"),
+                        rs.getInt("id_equipamento"),
                         rs.getString("problema_relatado"),
                         rs.getString("diagnostico_tecnico"),
                         rs.getString("prioridade"),
@@ -101,20 +97,18 @@ public class ChamadoDaoImpl implements ChamadoDao {
 
     @Override
     public void atualizar(Chamado chamado) {
-        String sql = "UPDATE ti_escola SET solicitante=?, sala=?, equipamento_tag=?, problema_relatado=?, diagnostico_tecnico=?, prioridade=?, status=?, data_abertura=? WHERE id=?";
+        String sql = "UPDATE chamado_tecnico SET solicitante=?, sala=?, equipamento_tag=?, problema_relatado=?, diagnostico_tecnico=?, prioridade=?, status=?, data_abertura=? WHERE id=?";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, chamado.getSolicitante());
-            stmt.setString(2, chamado.getSala());
-            stmt.setString(3, chamado.getEquipamentoTag());
-            stmt.setString(4, chamado.getProblemaRelatado());
-            stmt.setString(5, chamado.getDiagnosticoTecnico());
-            stmt.setString(6, chamado.getPrioridade());
-            stmt.setString(7, chamado.getStatus());
-            stmt.setString(8, chamado.getDataAbertura());
-            stmt.setLong(9, chamado.getId());
+            stmt.setInt(1, chamado.getIdUsuario());
+            stmt.setInt(2, chamado.getIdEquipamentoTag());
+            stmt.setString(3, chamado.getProblemaRelatado());
+            stmt.setString(4, chamado.getDiagnosticoTecnico());
+            stmt.setString(5, chamado.getPrioridade());
+            stmt.setString(6, chamado.getStatus());
+            stmt.setString(7, chamado.getDataAbertura());
 
             stmt.executeUpdate();
 
@@ -125,10 +119,10 @@ public class ChamadoDaoImpl implements ChamadoDao {
 
     @Override
     public void excluir(Long id) {
-        String sql = "DELETE FROM ti_escola WHERE id = ?";
+        String sql = "DELETE FROM chamado_tecnico WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
             stmt.executeUpdate();

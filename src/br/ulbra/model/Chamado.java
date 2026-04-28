@@ -3,9 +3,10 @@ package br.ulbra.model;
 public class Chamado {
 
     private Long id;
-    private String solicitante;
-    private String sala;
-    private String equipamentoTag;
+    private int idUsuario;
+    private Usuario usuario;
+    private int  idEquipamentoTag;
+    private Equipamento equipamentoTag;
     private String problemaRelatado;
     private String diagnosticoTecnico;
     private String prioridade;
@@ -15,23 +16,20 @@ public class Chamado {
     
      public Chamado() {
     }
-     
-     public Chamado(Long id, String solicitante, String sala,
-                   String equipamentoTag, String problemaRelatado,
-                   String diagnosticoTecnico, String prioridade,
-                   String status, String dataAbertura) {
 
+    public Chamado(Long id, int idUsuario,  int idEquipamentoTag,  String problemaRelatado, String diagnosticoTecnico, String prioridade, String status, String dataAbertura) {
         this.id = id;
-        this.solicitante = solicitante;
-        this.sala = sala;
-        this.equipamentoTag = equipamentoTag;
+        this.idUsuario = idUsuario;
+      
+        this.idEquipamentoTag = idEquipamentoTag;
+      
         this.problemaRelatado = problemaRelatado;
         this.diagnosticoTecnico = diagnosticoTecnico;
         this.prioridade = prioridade;
         this.status = status;
         this.dataAbertura = dataAbertura;
-    } 
-     
+    }
+
     public Long getId() {
         return id;
     }
@@ -40,27 +38,35 @@ public class Chamado {
         this.id = id;
     }
 
-    public String getSolicitante() {
-        return solicitante;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setSolicitante(String solicitante) {
-        this.solicitante = solicitante;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public String getSala() {
-        return sala;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setSala(String sala) {
-        this.sala = sala;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public String getEquipamentoTag() {
+    public int getIdEquipamentoTag() {
+        return idEquipamentoTag;
+    }
+
+    public void setIdEquipamentoTag(int idEquipamentoTag) {
+        this.idEquipamentoTag = idEquipamentoTag;
+    }
+
+    public Equipamento getEquipamentoTag() {
         return equipamentoTag;
     }
 
-    public void setEquipamentoTag(String equipamentoTag) {
+    public void setEquipamentoTag(Equipamento equipamentoTag) {
         this.equipamentoTag = equipamentoTag;
     }
 
@@ -105,6 +111,8 @@ public class Chamado {
     }
 
     
-}
-   
 
+   
+     
+    
+}
